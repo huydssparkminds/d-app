@@ -1,0 +1,99 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.wrapper {
+  height: 100vh;
+  background-color: black;
+  position: relative;
+  overflow: hidden;
+  padding: 6rem 6rem;
+  background-image: url("./assets/bg.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+.gradient1 {
+  content: "";
+  position: absolute;
+  width: 700px;
+  height: 700px;
+  background: radial-gradient(circle, #8a2be266 0%, rgba(138, 43, 226, 0) 70%);
+  border-radius: 50%;
+  filter: blur(130px);
+  top: -14%;
+  left: 47%;
+  transform: translate(-50%, -50%);
+  animation: moveGradient1 6s infinite alternate;
+}
+
+.gradient2 {
+  content: "";
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, #ffd7004d 0%, rgba(255, 215, 0, 0) 70%);
+  border-radius: 50%;
+  filter: blur(50px);
+  bottom: 8%;
+  right: 11%;
+  transform: translate(50%, 50%);
+  animation: moveGradient2 6s infinite alternate;
+}
+
+@keyframes moveGradient1 {
+  0% {
+    transform: translate(-50%, -50%) translateY(0);
+  }
+  100% {
+    transform: translate(-50%, -50%) translateY(-20px);
+  }
+}
+
+@keyframes moveGradient2 {
+  0% {
+    transform: translate(-50%, -50%) translateY(0);
+  }
+  100% {
+    transform: translate(-50%, -50%) translateY(20px);
+  }
+}
+
+@layer base {
+  :root {
+    --radius: 0.5rem;
+  }
+}
+
+.text-effect {
+  color: hsl(0, 0%, 28%);
+  font-size: 30px !important;
+  font-weight: bold !important;
+  letter-spacing: 5px !important;
+  text-transform: uppercase;
+  text-align: center;
+  margin-bottom: 20px;
+  position: relative;
+  display: inline-block;
+
+  background: linear-gradient(
+    120deg,
+    rgba(255, 255, 255, 0.8) 0%,
+    rgba(255, 255, 255, 0) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  background-size: 200%;
+  background-clip: text;
+  -webkit-background-clip:text ;
+  -webkit-text-fill-color:transparent ;
+
+  animation: shine 2s linear infinite;
+}
+
+@keyframes shine {
+  to {
+    background-position: -200%;
+  }
+}
+
