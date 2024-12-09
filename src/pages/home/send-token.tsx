@@ -22,7 +22,8 @@ import { erc20Abi, formatUnits, isAddress } from "viem";
 import { useAccount } from "wagmi";
 import { getBalance } from "@wagmi/core";
 import { config } from "@/wagmi-config";
-import toast from 'react-hot-toast';
+import toast from "react-hot-toast";
+import BlurIn from "@/components/ui/blur-in";
 
 type Token = {
   symbol: string;
@@ -63,12 +64,17 @@ const SendToken = () => {
 
   const { address, isConnected, chainId } = useAccount();
   const [sendToken, { isPending, error, isSuccess, isError }] = useSendToken();
-  const { balance,symbol,refetch } = useGetBalance(chainId, address, activeToken?.address);
+  const { balance, symbol, refetch } = useGetBalance(
+    chainId,
+    address,
+    activeToken?.address
+  );
 
   const onSelectToken = (string: string) => {
     const item = TOKENS.find((token) => token.symbol === string);
     if (!item) return;
     setActiveToken(item);
+    setValue("");
   };
 
   useEffect(() => {
@@ -76,7 +82,28 @@ const SendToken = () => {
       refetch();
       // toast.success("Transaction sent successfully");
     }
-  })
+  });
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+
+    const formattedValue = value.replace(/[^0-9.,]/g, "");
+    const decimalCount = activeToken?.decimals || 5;
+
+    const decimalPart = formattedValue.split(/[.,]/)[1];
+    if (decimalPart && decimalPart.length > decimalCount) {
+      const integerPart = formattedValue.split(/[.,]/)[0];
+      const limitedDecimalPart = decimalPart.slice(0, decimalCount);
+      return `${integerPart}.${limitedDecimalPart}`;
+    }
+
+    return formattedValue;
+  };
+
+  const onSetValue = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const formattedValue = handleInputChange(e);
+    setValue(formattedValue);
+  };
 
   const handleSendTransaction = async () => {
     if (!isAddress(to)) {
@@ -102,7 +129,10 @@ const SendToken = () => {
   return (
     <>
       <div className="flex flex-col w-full max-w-full">
-        <h2 className="text-effect">Tranfer Token</h2>
+        <BlurIn
+          word="Tranfer Token"
+          className="lg:text-2xl font-bold text-white mb-5"
+        />
         <Select onValueChange={(value) => onSelectToken(value)}>
           <SelectTrigger className="w-full">
             <SelectValue placeholder="Select a Token" />
@@ -129,13 +159,13 @@ const SendToken = () => {
         <Input
           type="number"
           id="Amount"
-          onChange={(e) => setValue(e.target.value)}
+          value={value}
+          onChange={onSetValue}
           defaultValue="0"
           min="0"
         />
         <span className="text-xs text-gray-500">
-          Balance:{" "}
-          {balance ? `${balance} ${symbol}`  : "0"}
+          Balance: {balance ? `${balance} ${symbol}` : "0"}
         </span>
       </div>
       <div className="flex flex-col w-full max-w-full mt-5">
@@ -145,26 +175,20 @@ const SendToken = () => {
         <Input id="address" onChange={(e) => setTo(e.target.value)} />
       </div>
 
-      {isConnected ? (
-        <Button
-          disabled={isPending}
-          onClick={handleSendTransaction}
-          className="w-full mt-5"
-        >
-          {isPending ? (
-            <>
-              <Loader2 className="animate-spin" />
-              Please wait
-            </>
-          ) : (
-            "Send"
-          )}
-        </Button>
-      ) : (
-        <div className="w-full mt-5">
-          <ConnectButton label="Connect Wallet" />
-        </div>
-      )}
+      <Button
+        disabled={isPending  || !isConnected}
+        onClick={handleSendTransaction}
+        className="w-full mt-5"
+      >
+        {isPending ? (
+          <>
+            <Loader2 className="animate-spin" />
+            Please wait
+          </>
+        ) : (
+          "Send"
+        )}
+      </Button>
     </>
   );
 };

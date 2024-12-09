@@ -7,11 +7,18 @@
   background-color: black;
   position: relative;
   overflow: hidden;
-  padding: 6rem 6rem;
-  background-image: url("./assets/bg.png");
+  /* background-image: url("./assets/bg.png");
   background-repeat: no-repeat;
-  background-size: cover;
+  background-size: cover; */
   background-position: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.glassmorphism {
+  background: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(2px);
 }
 
 .gradient1 {
@@ -85,8 +92,8 @@
   );
   background-size: 200%;
   background-clip: text;
-  -webkit-background-clip:text ;
-  -webkit-text-fill-color:transparent ;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 
   animation: shine 2s linear infinite;
 }
@@ -95,5 +102,11 @@
   to {
     background-position: -200%;
   }
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 

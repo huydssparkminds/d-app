@@ -1,4 +1,5 @@
 import { useSendNative } from "@/components/hook/useToken";
+import BlurIn from "@/components/ui/blur-in";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
@@ -34,7 +35,10 @@ const SendTransactionNative = () => {
   return (
     <>
       <div className="flex flex-col w-full max-w-full">
-      <h2 className="text-effect">Tranfer Coin</h2>
+        <BlurIn
+          word="Tranfer Coin"
+          className="lg:text-2xl font-bold text-white"
+        />
         <label className="font-bold" htmlFor="quantity">
           Amount
         </label>
@@ -56,26 +60,20 @@ const SendTransactionNative = () => {
         <Input id="address" onChange={(e) => setTo(e.target.value)} />
       </div>
 
-      {isConnected ? (
-        <Button
-          disabled={isPending}
-          onClick={handleSendTransaction}
-          className="w-full mt-5"
-        >
-          {isPending ? (
-            <>
-              <Loader2 className="animate-spin" />
-              Please wait
-            </>
-          ) : (
-            "Send"
-          )}
-        </Button>
-      ) : (
-        <div className="w-full mt-5">
-          <ConnectButton label="Connect Wallet" />
-        </div>
-      )}
+      <Button
+        disabled={isPending || !isConnected}
+        onClick={handleSendTransaction}
+        className="w-full mt-5"
+      >
+        {isPending ? (
+          <>
+            <Loader2 className="animate-spin" />
+            Please wait
+          </>
+        ) : (
+          "Send"
+        )}
+      </Button>
     </>
   );
 };

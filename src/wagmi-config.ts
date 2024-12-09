@@ -4,7 +4,7 @@ import {
   walletConnectWallet,
 } from "@rainbow-me/rainbowkit/wallets";
 import { createConfig, http } from "wagmi";
-import { sepolia } from "wagmi/chains";
+import { sepolia, mainnet } from "wagmi/chains";
 const projectId = "413b78027137605a388461d888501f98";
 
 const connectors = connectorsForWallets(
@@ -21,9 +21,10 @@ const connectors = connectorsForWallets(
 );
 
 export const config = createConfig({
-  chains: [sepolia],
+  chains: [sepolia,mainnet],
   connectors,
   transports: {
     [sepolia.id]: http(),
+    [mainnet.id]: http(),
   },
 });
